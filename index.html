@@ -155,7 +155,9 @@ h1,h2,h3{font-weight:800;line-height:1.08;color:var(--teal-ink)}
 }
 .congestion-bar .road{flex:1;height:10px;border-radius:99px;background:rgba(247,244,232,.12);overflow:hidden;position:relative}
 .congestion-bar .road i{position:absolute;inset:0;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--lime))}
-.congestion-bar .pct{font-size:22px;font-weight:800;color:var(--lime);min-width:76px;text-align:right}
+.congestion-bar .pct{font-size:22px;font-weight:800;color:var(--lime);min-width:92px;text-align:right}
+.congestion-bar .road .tick{position:absolute;top:0;bottom:0;left:45.18%;width:2px;background:var(--cream);opacity:.8;z-index:2}
+.bar-labels{max-width:680px;margin:10px auto 0;padding:0 26px;display:flex;justify-content:space-between;gap:12px;font-size:12px;font-weight:700;color:rgba(247,244,232,.7)}
 
 /* ================= 3D CITY ================= */
 #city-section{background:linear-gradient(180deg,var(--teal-deep) 0%,#0B4A43 30%,#0A3B36 100%);position:relative}
@@ -396,10 +398,14 @@ footer b{color:var(--lime)}
     <h2 style="margin-top:18px">Tanpa integrasi, pertumbuhan UMKM justru <b>membekap mobilitas kota.</b></h2>
     <p>IKN dibangun sebagai <i>greenfield smart city</i> — namun lonjakan aktivitas ekonomi mikro, dari 27.542 menjadi 60.959 unit UMKM di wilayah penyangga Balikpapan dalam dua tahun, berpotensi menimbulkan kemacetan, konflik pemanfaatan ruang, dan inefisiensi logistik jika dikelola secara konvensional.</p>
     <div class="congestion-bar">
-      <div class="road"><i id="cong-fill"></i></div>
-      <div class="pct" id="cong-pct">0%</div>
+      <div class="road"><i id="cong-fill"></i><span class="tick"></span></div>
+      <div class="pct" id="cong-pct">+0%</div>
     </div>
-    <p style="margin-top:18px;font-size:13px;color:rgba(247,244,232,.5)">Simulasi risiko hambatan logistik UMKM tanpa infrastruktur cerdas</p>
+    <div class="bar-labels">
+      <span>2020 · 27.542 unit</span>
+      <span>2022 · 60.959 unit</span>
+    </div>
+    <p style="margin-top:18px;font-size:13px;color:rgba(247,244,232,.5)">Pertumbuhan jumlah UMKM di Balikpapan (wilayah penyangga IKN), 2020–2022 — bertambah lebih dari dua kali lipat tanpa pengelolaan mobilitas yang terintegrasi.<br>Sumber data: BPS (2023); GoodStats (2023).</p>
   </div>
 </section>
 
@@ -579,9 +585,10 @@ document.querySelectorAll('.count').forEach(el=>{
 })();
 
 /* ---------- Congestion bar ---------- */
-gsap.to('#cong-fill',{width:'82%',duration:2.2,ease:'power2.out',
+/* Data asli: UMKM Balikpapan 27.542 (2020) -> 60.959 (2022) = +121% ; tanda di 45,18% = posisi nilai 2020 */
+gsap.to('#cong-fill',{width:'100%',duration:2.2,ease:'power2.out',
   scrollTrigger:{trigger:'#problem',start:'top 60%'},
-  onUpdate:function(){document.getElementById('cong-pct').textContent=Math.round(this.progress()*82)+'%';}});
+  onUpdate:function(){document.getElementById('cong-pct').textContent='+'+Math.round(this.progress()*121)+'%';}});
 
 /* ---------- Reveal generik ---------- */
 document.querySelectorAll('.reveal').forEach(el=>{
