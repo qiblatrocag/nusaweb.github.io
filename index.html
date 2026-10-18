@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>V2X × Smart Micro-Economy Hub — IKN 2045</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F7F4E8;
+  --cream-2:#FFFDF4;
+  --lime:#D8F000;
+  --lime-soft:#EAFB6A;
+  --teal:#0E6B5C;
+  --teal-deep:#0A3B36;
+  --teal-ink:#123B33;
+  --ink:#0E2B26;
+  --nav-h:68px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+::selection{background:var(--lime);color:var(--teal-deep)}
+
+/* ---------- Progress bar ---------- */
+#progress{position:fixed;top:0;left:0;height:4px;width:0%;
+  background:linear-gradient(90deg,var(--teal),var(--lime));
+  z-index:100;border-radius:0 4px 4px 0}
+
+/* ---------- Nav ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:90;height:var(--nav-h);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 clamp(16px,4vw,56px);
+  background:rgba(247,244,232,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:background .4s,box-shadow .4s;
+}
+nav.scrolled{background:rgba(247,244,232,.94);box-shadow:0 2px 24px rgba(10,59,54,.10)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;letter-spacing:.5px;color:var(--teal-deep)}
+.nav-logo svg{width:30px;height:30px;flex:none;animation:none}
+.nav-links{display:flex;gap:26px;font-size:13px;font-weight:600}
+.nav-links a{color:var(--teal-deep);text-decoration:none;opacity:.75;transition:.3s;position:relative}
+.nav-links a:hover{opacity:1}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;background:var(--lime);transition:.3s}
+.nav-links a:hover::after{width:100%}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* ---------- Mascot geometris (SVG) ---------- */
+.mascot{width:100%;height:100%;display:block}
+.mascot .body{fill:var(--teal);transition:.35s}
+.mascot .eyes{fill:var(--lime);transition:.35s}
+.mascot-wrap{filter:drop-shadow(0 8px 18px rgba(14,107,92,.35));animation:bob 4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(4deg)}}
+@keyframes spin{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.mascot-wrap:hover .mascot .body{fill:var(--teal-deep)}
+.mascot-wrap:hover .mascot .eyes{fill:var(--lime-soft)}
+
+/* ---------- Section dasar ---------- */
+section{position:relative}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);background:rgba(14,107,92,.08);
+  padding:8px 18px;border-radius:999px;border:1px solid rgba(14,107,92,.15);
+}
+.eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);flex:none}
+h1,h2,h3{font-weight:800;line-height:1.08;color:var(--teal-ink)}
+.grad-text{background:linear-gradient(95deg,var(--teal) 10%,#4CAF7D 55%,#9CC400 95%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ================= HERO ================= */
+#hero{
+  min-height:100vh;min-height:100svh;display:flex;align-items:center;
+  /* ruang di bawah nav agar eyebrow tidak tertutup */
+  padding:calc(var(--nav-h) + clamp(28px,6vh,64px)) 0 clamp(48px,8vh,80px);
+  background:
+    radial-gradient(1000px 500px at 85% -10%,rgba(216,240,0,.16),transparent 60%),
+    radial-gradient(800px 500px at -10% 110%,rgba(14,107,92,.10),transparent 60%),
+    var(--cream);
+  overflow:hidden;
+}
+/* Ornamen floral: dekoratif, di BELAKANG konten, samar, sebagian keluar layar */
+.corner-ornament{
+  position:absolute;z-index:0;pointer-events:none;
+  width:min(26vw,320px);height:auto;opacity:.22;
+}
+#orn-tl{top:var(--nav-h);left:0;transform:translate(-16%,-4%)}
+#orn-br{bottom:0;right:0;transform:rotate(180deg) translate(-16%,-4%)}
+@media(max-width:768px){.corner-ornament{width:46vw;opacity:.14}}
+#hero .wrap{position:relative;z-index:2}
+
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(24px,4vw,60px);align-items:center;width:100%}
+.hero-title{font-size:clamp(34px,5.2vw,68px);margin:22px 0 20px}
+.hero-title .tagline-line{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.hero-title .tagline-line span{display:inline-block}
+.hero-sub{font-size:clamp(15px,1.4vw,18px);line-height:1.7;color:#3A564F;max-width:56ch;font-weight:500}
+.hero-cta{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 30px;border-radius:16px;font-weight:700;font-size:15px;
+  text-decoration:none;cursor:pointer;border:none;font-family:inherit;
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.4),box-shadow .3s;
+}
+.btn-primary{
+  background:linear-gradient(120deg,var(--teal) 0%,var(--teal-deep) 100%);
+  color:var(--lime);box-shadow:0 10px 30px rgba(10,59,54,.30);
+}
+.btn-primary:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 0 0 3px var(--lime),0 16px 40px rgba(10,59,54,.4)}
+.btn-ghost{background:transparent;color:var(--teal-deep);border:2px solid var(--teal)}
+.btn-ghost:hover{background:var(--lime);border-color:var(--lime);transform:translateY(-4px)}
+.hero-stats{display:flex;gap:clamp(20px,3vw,48px);margin-top:46px;flex-wrap:wrap}
+.stat .num{font-size:clamp(30px,3.6vw,52px);font-weight:800;color:var(--teal-deep)}
+.stat .num em{font-style:normal;color:#7FA30B;font-size:.6em}
+.stat .lbl{font-size:12.5px;font-weight:600;color:#4A655E;letter-spacing:.4px;margin-top:4px;max-width:16ch}
+
+/* Orbit maskot di hero */
+.hero-visual{position:relative;height:clamp(300px,44vw,520px)}
+.orbit-stage{position:absolute;inset:0}
+.orbit-ring{position:absolute;top:50%;left:50%;border:1.5px dashed rgba(14,107,92,.28);border-radius:50%;transform:translate(-50%,-50%)}
+.orbit-item{position:absolute;width:64px;height:64px}
+/* Core dipusatkan dengan inset+margin:auto (bukan transform) agar animasi bob tidak menggesernya */
+.orbit-core{
+  position:absolute;inset:0;margin:auto;
+  width:clamp(150px,17vw,210px);height:clamp(150px,17vw,210px);
+}
+.orbit-label{
+  position:absolute;background:var(--cream-2);border:1.5px solid rgba(14,107,92,.2);
+  border-radius:12px;padding:8px 14px;font-size:11.5px;font-weight:700;color:var(--teal-deep);
+  box-shadow:0 6px 18px rgba(10,59,54,.10);white-space:nowrap;
+}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-visual{height:320px;margin-top:10px}
+}
+
+/* ================= MARQUEE masalah ================= */
+#problem{background:var(--teal-deep);color:var(--cream);padding:clamp(60px,8vw,110px) 0;overflow:hidden}
+.marquee{display:flex;gap:48px;white-space:nowrap;will-change:transform;padding:14px 0;width:max-content}
+.marquee span{font-size:clamp(16px,1.8vw,24px);font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(216,240,0,.9)}
+.marquee span i{font-style:normal;color:rgba(247,244,232,.45);margin-left:48px}
+.problem-inner{text-align:center;max-width:860px;margin:40px auto 0}
+.problem-inner h2{font-size:clamp(26px,3.6vw,46px);color:var(--cream)}
+.problem-inner h2 b{color:var(--lime)}
+.problem-inner p{margin-top:20px;font-size:clamp(15px,1.4vw,18px);line-height:1.75;color:rgba(247,244,232,.78);font-weight:400}
+.congestion-bar{
+  margin:44px auto 0;max-width:680px;background:rgba(247,244,232,.08);
+  border:1px solid rgba(216,240,0,.25);border-radius:20px;padding:22px 26px;
+  display:flex;align-items:center;gap:18px;
+}
+.congestion-bar .road{flex:1;height:10px;border-radius:99px;background:rgba(247,244,232,.12);overflow:hidden;position:relative}
+.congestion-bar .road i{position:absolute;inset:0;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--lime))}
+.congestion-bar .pct{font-size:22px;font-weight:800;color:var(--lime);min-width:76px;text-align:right}
+
+/* ================= 3D CITY ================= */
+#city-section{background:linear-gradient(180deg,var(--teal-deep) 0%,#0B4A43 30%,#0A3B36 100%);position:relative}
+#city-pin{height:100vh;height:100svh;position:relative;overflow:hidden}
+/* canvas WAJIB 100% x 100% — tanpa ini canvas tampil di ukuran bawaan & terpotong/tidak di tengah */
+#city-canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
+
+.city-title{
+  position:absolute;top:calc(var(--nav-h) + 14px);left:0;right:0;text-align:center;z-index:20;pointer-events:none;padding:0 16px;
+}
+.city-title .eyebrow{background:rgba(247,244,232,.1);color:var(--lime);border-color:rgba(216,240,0,.3)}
+.city-title h2{color:var(--cream);font-size:clamp(22px,3vw,38px);margin-top:12px}
+.city-title h2 b{color:var(--lime)}
+
+/* Semua kartu ditumpuk di SATU sel grid -> tinggi HUD = tinggi 1 kartu, tidak terpotong */
+.city-hud{
+  position:absolute;z-index:20;pointer-events:none;
+  left:clamp(16px,4vw,56px);
+  top:calc(50% + 52px);transform:translateY(-50%);
+  width:min(390px,36vw);
+  display:grid;
+}
+.layer-card{
+  grid-area:1/1;align-self:center;
+  background:rgba(247,244,232,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-radius:22px;padding:22px 24px;
+  border-left:6px solid var(--lime);box-shadow:0 20px 50px rgba(0,0,0,.35);
+  opacity:0;visibility:hidden;
+}
+.layer-card h3{font-size:clamp(15px,1.35vw,18px);display:flex;align-items:center;gap:12px}
+.layer-card h3 .mini{width:34px;height:34px;flex:none}
+.layer-card p{font-size:clamp(12px,1vw,13.5px);line-height:1.6;color:#3A564F;margin-top:10px;font-weight:500}
+.layer-card .chip{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;color:var(--teal);background:rgba(216,240,0,.35);padding:5px 12px;border-radius:99px}
+
+#callouts{position:absolute;inset:0;z-index:15;pointer-events:none}
+.callout{
+  position:absolute;left:0;top:0;transform:translate(-50%,-130%);
+  background:rgba(10,59,54,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(216,240,0,.45);color:var(--cream);
+  font-size:11.5px;font-weight:700;padding:8px 14px;border-radius:12px;
+  white-space:nowrap;opacity:0;transition:opacity .35s;
+}
+.callout::after{
+  content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);
+  width:2px;height:26px;background:linear-gradient(180deg,var(--lime),transparent);
+}
+.callout b{color:var(--lime)}
+.callout .dot{position:absolute;left:50%;top:100%;transform:translate(-50%,26px);
+  width:10px;height:10px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 14px var(--lime),0 0 0 5px rgba(216,240,0,.2)}
+.scroll-hint{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:20;
+  color:rgba(247,244,232,.7);font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;white-space:nowrap;
+}
+.scroll-hint .wheel{width:22px;height:34px;border:1.5px solid rgba(216,240,0,.6);border-radius:12px;position:relative}
+.scroll-hint .wheel::after{content:'';position:absolute;left:50%;top:6px;width:4px;height:7px;margin-left:-2px;border-radius:4px;background:var(--lime);animation:wheel 1.6s ease-in-out infinite}
+@keyframes wheel{0%,100%{transform:translateY(0);opacity:1}70%{transform:translateY(10px);opacity:0}}
+
+@media(max-width:900px){
+  .city-title{top:calc(var(--nav-h) + 8px)}
+  .city-title .eyebrow{font-size:10px;letter-spacing:2px;padding:6px 12px}
+  .city-title h2{font-size:19px;margin-top:8px}
+  .city-hud{left:12px;right:12px;width:auto;top:auto;bottom:14px;transform:none}
+  .layer-card{padding:14px 16px;border-radius:18px}
+  .layer-card h3{font-size:14px}
+  .layer-card h3 .mini{width:26px;height:26px}
+  .layer-card p{font-size:11.5px;line-height:1.5;margin-top:8px}
+  .layer-card .chip{display:none}
+  .callout{white-space:normal;max-width:150px;text-align:center;font-size:10px;padding:6px 10px}
+  .scroll-hint{display:none}
+}
+@media(max-height:620px) and (min-width:901px){
+  .city-title .eyebrow{display:none}
+  .city-hud{top:calc(50% + 40px)}
+}
+
+/* ================= DETAIL STRIP ================= */
+#details{background:var(--cream);padding:clamp(70px,9vw,120px) 0}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+.detail-card{
+  background:var(--cream-2);border:1.5px solid rgba(14,107,92,.14);
+  border-radius:26px;padding:34px 30px;position:relative;overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.2),box-shadow .4s,border-color .4s;
+}
+.detail-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,var(--teal),var(--lime));
+  transform:scaleX(0);transform-origin:left;transition:transform .5s;
+}
+.detail-card:hover{transform:translateY(-10px);box-shadow:0 24px 50px rgba(10,59,54,.16);border-color:transparent}
+.detail-card:hover::before{transform:scaleX(1)}
+.detail-card .icon{width:74px;height:74px;margin-bottom:20px}
+.detail-card h3{font-size:19px;margin-bottom:12px}
+.detail-card p{font-size:14px;line-height:1.7;color:#4A655E;font-weight:500}
+.detail-card ul{list-style:none;margin-top:16px}
+.detail-card li{font-size:13px;font-weight:600;color:var(--teal-deep);padding:8px 0;border-top:1px dashed rgba(14,107,92,.2);display:flex;align-items:center;gap:10px}
+.detail-card li::before{content:'';width:7px;height:7px;background:var(--lime);border-radius:2px;transform:rotate(45deg);flex:none}
+@media(max-width:900px){.detail-grid{grid-template-columns:1fr}}
+
+/* ================= TIMELINE ================= */
+#timeline{background:linear-gradient(180deg,var(--cream) 0%,#EFF2DC 100%);padding:clamp(70px,9vw,120px) 0}
+.tl-track{position:relative;margin-top:56px;padding-left:34px}
+.tl-track::before{content:'';position:absolute;left:12.5px;top:6px;bottom:6px;width:3px;
+  background:linear-gradient(180deg,var(--teal),var(--lime));border-radius:99px}
+.tl-item{position:relative;padding:0 0 40px 26px}
+.tl-item::before{
+  content:'';position:absolute;box-sizing:border-box;left:-33px;top:2px;width:26px;height:26px;border-radius:50%;
+  background:var(--cream);border:4px solid var(--teal);
+}
+.tl-item:nth-child(even)::before{border-color:#8CBE0E}
+.tl-item h3{font-size:17px;line-height:1.4}
+.tl-item h3 span{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;color:var(--teal-deep);background:var(--lime);padding:4px 12px;border-radius:99px;margin-right:10px;vertical-align:middle}
+.tl-item p{font-size:13.5px;line-height:1.65;color:#4A655E;margin-top:8px;max-width:70ch;font-weight:500}
+
+/* ================= CTA ================= */
+#cta{
+  min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(1200px 700px at 50% 120%,rgba(216,240,0,.22),transparent 55%),var(--teal-deep);
+  color:var(--cream);overflow:hidden;position:relative;padding:80px 0;
+}
+#cta .stars{position:absolute;inset:0;pointer-events:none}
+.cta-inner{position:relative;z-index:5;padding:0 24px}
+.cta-inner h2{font-size:clamp(32px,5.4vw,72px);color:var(--cream)}
+.cta-inner h2 .glow{color:var(--lime);text-shadow:0 0 34px rgba(216,240,0,.55)}
+.cta-inner p{margin:22px auto 40px;max-width:60ch;font-size:clamp(14px,1.5vw,18px);line-height:1.75;color:rgba(247,244,232,.75)}
+.cta-btn{
+  position:relative;display:inline-flex;align-items:center;gap:14px;
+  padding:20px 46px;border-radius:20px;font-size:clamp(15px,1.6vw,19px);font-weight:800;
+  color:var(--teal-deep);background:linear-gradient(120deg,var(--lime) 0%,var(--lime-soft) 100%);
+  text-decoration:none;cursor:pointer;border:none;font-family:inherit;
+  box-shadow:0 0 0 0 rgba(216,240,0,.5);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.5);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(216,240,0,.45)}50%{box-shadow:0 0 0 18px rgba(216,240,0,0)}}
+.cta-btn:hover{transform:translateY(-5px) scale(1.04)}
+.cta-btn .arrow{transition:transform .3s}
+.cta-btn:hover .arrow{transform:translateX(6px)}
+.cta-mascots{display:flex;gap:22px;justify-content:center;margin-top:56px}
+.cta-mascots .mascot-wrap{width:56px;height:56px}
+footer{background:var(--teal-deep);color:rgba(247,244,232,.5);text-align:center;
+  font-size:12px;padding:26px 20px;border-top:1px solid rgba(247,244,232,.1)}
+footer b{color:var(--lime)}
+.reveal{opacity:0;transform:translateY(46px)}
+
+@media(prefers-reduced-motion:reduce){
+  .mascot-wrap,.cta-btn,.scroll-hint .wheel::after{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- Definisi ornamen floral (dipakai ulang lewat <use>) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="orn" viewBox="0 0 340 340">
+    <g fill="none" stroke="#0E6B5C" stroke-width="5" stroke-linecap="round">
+      <path d="M10 330 C 40 220, 30 160, 95 110 S 210 40, 320 15"/>
+      <path d="M10 330 C 90 300, 140 260, 165 185"/>
+    </g>
+    <g fill="#0E6B5C">
+      <path d="M95 110 c-26-34 6-66 34-44 c 22 18 8 58-34 44z"/>
+      <path d="M165 185 c-8-40 34-58 52-28 c14 24-14 52-52 28z"/>
+      <path d="M210 78 c20-30 58-14 52 20 c-5 28-48 24-52-20z"/>
+      <circle cx="52" cy="238" r="12"/><circle cx="120" cy="150" r="9"/>
+      <circle cx="262" cy="46" r="11"/>
+    </g>
+    <g fill="#B9D60A">
+      <path d="M128 62 c16-20 44-10 40 14 c-3 20-36 18-40-14z"/>
+      <path d="M40 290 c-4-22 24-32 34-12 c8 16-12 30-34 12z"/>
+    </g>
+    <g fill="none" stroke="#0E6B5C" stroke-width="3" stroke-linecap="round">
+      <path d="M70 200 q14-8 26 2"/><path d="M230 120 q12-12 26-4"/>
+      <path d="M150 40 q6-16 22-16"/>
+    </g>
+    <g fill="#0E6B5C"><circle cx="96" cy="202" r="4"/><circle cx="256" cy="116" r="4"/><circle cx="172" cy="24" r="4"/></g>
+  </symbol>
+</svg>
+
+<nav id="nav">
+  <div class="nav-logo">
+    <svg viewBox="0 0 60 60" class="mascot"><path class="body" d="M30 4 L52 17 L52 43 L30 56 L8 43 L8 17 Z"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg>
+    NISKALA&nbsp;2045
+  </div>
+  <div class="nav-links">
+    <a href="#hero">Latar Belakang</a>
+    <a href="#city-section">Arsitektur Kota</a>
+    <a href="#details">Ekosistem</a>
+    <a href="#timeline">Peta Jalan</a>
+    <a href="#cta">Bergabung</a>
+  </div>
+</nav>
+
+<!-- ============ 1. HERO ============ -->
+<section id="hero">
+  <svg id="orn-tl" class="corner-ornament" viewBox="0 0 340 340" aria-hidden="true"><use href="#orn"/></svg>
+  <svg id="orn-br" class="corner-ornament" viewBox="0 0 340 340" aria-hidden="true"><use href="#orn"/></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">PKM-GFT · Tema 9 · IKN 2045</span>
+      <h1 class="hero-title">
+        <span class="tagline-line"><span>Mobilitas Cerdas,</span></span>
+        <span class="tagline-line"><span class="grad-text">Ekonomi Niskala,</span></span>
+        <span class="tagline-line"><span>Kota Masa Depan.</span></span>
+      </h1>
+      <p class="hero-sub">Pemanfaatan <b>Vehicle-to-Everything (V2X)</b> dan <b>Smart Micro-Economy Hub</b> untuk optimalisasi mobilitas, ekonomi, dan transformasi Ibu Kota Nusantara 2045 — mengintegrasikan seluruh subsistem kota dari aspal hingga udara dalam satu arsitektur adaptif berbasis data.</p>
+      <div class="hero-cta">
+        <a href="#city-section" class="btn btn-primary">Jelajahi Arsitektur
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+        <a href="#details" class="btn btn-ghost">Lihat Ekosistem</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="num"><span class="count" data-to="61">0</span><em>%</em></div><div class="lbl">Kontribusi UMKM terhadap PDB nasional</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="99">0</span><em>%</em></div><div class="lbl">Dominasi unit usaha nasional oleh UMKM</div></div>
+        <div class="stat"><div class="num"><span class="count" data-to="66">0</span><em>jt</em></div><div class="lbl">Unit UMKM pada tahun 2023 — terus tumbuh</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit-stage" id="orbit-stage">
+        <div class="orbit-ring" style="width:78%;height:78%"></div>
+        <div class="orbit-ring" style="width:56%;height:56%;animation:spin 40s linear infinite reverse"></div>
+        <div class="orbit-core mascot-wrap">
+          <svg viewBox="0 0 60 60" class="mascot"><path class="body" d="M30 4 L52 17 L52 43 L30 56 L8 43 L8 17 Z"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section id="problem">
+  <div class="marquee" id="marquee"></div>
+  <div class="wrap problem-inner">
+    <span class="eyebrow" style="background:rgba(216,240,0,.1);color:var(--lime);border-color:rgba(216,240,0,.3)">Pemicu Gagasan</span>
+    <h2 style="margin-top:18px">Tanpa integrasi, pertumbuhan UMKM justru <b>membekap mobilitas kota.</b></h2>
+    <p>IKN dibangun sebagai <i>greenfield smart city</i> — namun lonjakan aktivitas ekonomi mikro, dari 27.542 menjadi 60.959 unit UMKM di wilayah penyangga Balikpapan dalam dua tahun, berpotensi menimbulkan kemacetan, konflik pemanfaatan ruang, dan inefisiensi logistik jika dikelola secara konvensional.</p>
+    <div class="congestion-bar">
+      <div class="road"><i id="cong-fill"></i></div>
+      <div class="pct" id="cong-pct">0%</div>
+    </div>
+    <p style="margin-top:18px;font-size:13px;color:rgba(247,244,232,.5)">Simulasi risiko hambatan logistik UMKM tanpa infrastruktur cerdas</p>
+  </div>
+</section>
+
+<!-- ============ 3D CITY ============ -->
+<section id="city-section">
+  <div id="city-pin">
+    <canvas id="city-canvas"></canvas>
+    <div class="city-title" id="city-title">
+      <span class="eyebrow">Arsitektur Teknologi Interaktif</span>
+      <h2>Tiga Lapis Ekosistem <b>IKN Cerdas</b></h2>
+    </div>
+    <div class="city-hud" id="city-hud">
+      <div class="layer-card" id="card-1">
+        <h3><svg viewBox="0 0 60 60" class="mascot mini"><path class="body" d="M30 4 L52 17 L52 43 L30 56 L8 43 L8 17 Z"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg>
+        Lapis 1 · Mobilitas Cerdas (V2X)</h3>
+        <p>Jaringan <b>6G C-V2X</b> dengan skema NOMA mempertukarkan data sub-milidetik. Roadside Unit berkemampuan radar (ISAC) memantau kendaraan &amp; pejalan kaki, dipantulkan oleh material <b>IRS</b> pada gedung hingga titik buta sekalipun.</p>
+        <span class="chip">Latensi &lt; 0,1 ms · Green Wave · V2I/V2V/V2P/V2N</span>
+      </div>
+      <div class="layer-card" id="card-2">
+        <h3><svg viewBox="0 0 60 60" class="mascot mini"><circle class="body" cx="30" cy="30" r="26"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg>
+        Lapis 2 · Infrastruktur Energi (Smart Roads)</h3>
+        <p>Aspal <b>piezoelektrik</b> memanen listrik dari tekanan ban kendaraan, dikombinasikan panel surya &amp; smart grid. <b>Dynamic Wireless Power Transfer (DWPT)</b> mengisi daya kendaraan listrik secara nirkabel saat melintas — menuju Net Zero Emission 2045.</p>
+        <span class="chip">Energy Harvesting · DWPT · Energi 100% Terbarukan</span>
+      </div>
+      <div class="layer-card" id="card-3">
+        <h3><svg viewBox="0 0 60 60" class="mascot mini"><rect class="body" x="6" y="6" width="48" height="48" rx="14"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg>
+        Lapis 3 · Smart Micro-Economy Hub</h3>
+        <p><b>Anjungan Niskala Nusantara</b> melokalisasi UMKM ke kawasan strategis. Drone <b>UAV</b> menangani logistik last-mile via udara, sementara <b>Spatial Computing</b> &amp; <b>Haptic Interface</b> menghadirkan belanja phygital imersif — jalan raya bebas hambatan.</p>
+        <span class="chip">UAV Delivery · Phygital · Urban Digital Twin</span>
+      </div>
+    </div>
+    <div id="callouts"></div>
+    <div class="scroll-hint" id="scroll-hint"><div class="wheel"></div>Scroll untuk menjelajah lapis kota</div>
+  </div>
+</section>
+
+<!-- ============ DETAIL ============ -->
+<section id="details">
+  <div class="wrap">
+    <span class="eyebrow">Dalam Satu Ekosistem</span>
+    <h2 style="font-size:clamp(26px,3.6vw,46px);margin-top:16px">Satu kota, <span class="grad-text">tiga lapis inovasi.</span></h2>
+    <div class="detail-grid">
+      <div class="detail-card reveal">
+        <div class="icon mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><path class="body" d="M30 4 L52 17 L52 43 L30 56 L8 43 L8 17 Z"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg></div>
+        <h3>Mobilitas Presisi</h3>
+        <p>Tulang punggung 6G C-V2X dengan NOMA + Blockchain: latensi rendah bertemu keamanan data kemudi otonom.</p>
+        <ul><li>RSU radar ISAC &amp; green wave</li><li>IRS memantulkan sinyal 6G</li><li>Urban Digital Twin Control Hub</li></ul>
+      </div>
+      <div class="detail-card reveal">
+        <div class="icon mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><circle class="body" cx="30" cy="30" r="26"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg></div>
+        <h3>Energi Mandiri</h3>
+        <p>Jalan bukan lagi konsumen energi — ia menjadi pembangkit. Smart roads mengubah tekanan ban menjadi listrik.</p>
+        <ul><li>Aspal piezoelektrik</li><li>DWPT segmented track</li><li>Hibrida baterai + superkapasitor</li></ul>
+      </div>
+      <div class="detail-card reveal">
+        <div class="icon mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><path class="body" d="M30 6 L54 50 L6 50 Z"/><rect class="eyes" x="24" y="33" width="5" height="12" rx="2.5"/><rect class="eyes" x="32" y="33" width="5" height="12" rx="2.5"/></svg></div>
+        <h3>Ekonomi Phygital</h3>
+        <p>Anjungan Niskala Nusantara: ruang ekonomi mikro terintegrasi pusat mobilitas dengan pengalaman belanja imersif.</p>
+        <ul><li>UAV last-mile delivery</li><li>AR Mirror &amp; etalase holografik</li><li>Sarung tangan haptik mikro-fluida</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section id="timeline">
+  <div class="wrap">
+    <span class="eyebrow">Peta Jalan Realisasi</span>
+    <h2 style="font-size:clamp(26px,3.6vw,46px);margin-top:16px">Empat fase menuju <span class="grad-text">IKN 2045.</span></h2>
+    <div class="tl-track">
+      <div class="tl-item reveal"><h3><span>2026–2029</span>Fase 1 · Inisiasi &amp; Prototipe</h3><p>Formulasi masterplan phygital economy, kerangka regulasi kendaraan otonom, konsorsium Pentahelix, riset RSU-ISAC, dan Proof of Concept Smart Micro-Economy Hub di Kawasan Sumbu Kebangsaan.</p></div>
+      <div class="tl-item reveal"><h3><span>2030–2034</span>Fase 2 · Ekspansi Infrastruktur</h3><p>Peluncuran platform Urban Digital Twin khusus UMKM, pemasangan smart roads di koridor arteri luar KIPP, perluasan hub ke Balikpapan &amp; PPU, serta migrasi masif UMKM ke ekosistem phygital.</p></div>
+      <div class="tl-item reveal"><h3><span>2035–2039</span>Fase 3 · Operasional Skala Kota</h3><p>Integrasi penuh V2X di seluruh jaringan jalan IKN dan pengerahan armada UAV otonom untuk manajemen logistik last-mile UMKM.</p></div>
+      <div class="tl-item reveal"><h3><span>2040–2045</span>Fase 4 · Net-Zero Emission</h3><p>Audit komprehensif efisiensi lalu lintas &amp; indeks ekonomi UMKM, upgrade jaringan Beyond 6G, dan kemandirian energi operasional 100% dari sumber terbarukan.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section id="cta">
+  <div class="stars" id="stars"></div>
+  <div class="cta-inner">
+    <span class="eyebrow" style="background:rgba(216,240,0,.1);color:var(--lime);border-color:rgba(216,240,0,.3)">Masa Depan Dimulai Sekarang</span>
+    <h2 style="margin-top:20px">Jadilah bagian dari<br><span class="glow">Anjungan Niskala Nusantara.</span></h2>
+    <p>Dukung terwujudnya IKN 2045 — kota di mana mobilitas, energi, dan ekonomi mikro bergerak dalam satu irama cerdas, inklusif, dan berkelanjutan.</p>
+    <button class="cta-btn" id="cta-btn">Mulai Perjalanan ke 2045
+      <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </button>
+    <div class="cta-mascots">
+      <div class="mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><path class="body" d="M30 4 L52 17 L52 43 L30 56 L8 43 L8 17 Z"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg></div>
+      <div class="mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><circle class="body" cx="30" cy="30" r="26"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg></div>
+      <div class="mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><rect class="body" x="6" y="6" width="48" height="48" rx="14"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/></svg></div>
+      <div class="mascot-wrap"><svg viewBox="0 0 60 60" class="mascot"><path class="body" d="M30 6 L54 50 L6 50 Z"/><rect class="eyes" x="24" y="33" width="5" height="12" rx="2.5"/><rect class="eyes" x="32" y="33" width="5" height="12" rx="2.5"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Tim PKM-GFT Universitas Diponegoro · <b>V2X × Smart Micro-Economy Hub</b> · IKN 2045</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ignoreMobileResize:true});
+
+/* ---------- Progress bar & nav ---------- */
+(function(){
+  const bar=document.getElementById('progress'),nav=document.getElementById('nav');
+  function onScroll(){
+    const h=document.documentElement;
+    const max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?h.scrollTop/max*100:0)+'%';
+    nav.classList.toggle('scrolled',h.scrollTop>60);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+
+/* ---------- Hero entrance ---------- */
+gsap.from('.hero-title .tagline-line span',{yPercent:110,duration:1.1,stagger:.12,ease:'power4.out',delay:.15});
+gsap.from('.hero-sub,.hero-cta,.hero-stats',{y:34,opacity:0,duration:.9,stagger:.12,ease:'power3.out',delay:.55});
+
+/* ---------- Counter ---------- */
+document.querySelectorAll('.count').forEach(el=>{
+  const to=+el.dataset.to;
+  gsap.to(el,{innerText:to,duration:1.8,delay:.8,snap:{innerText:1},ease:'power2.out'});
+});
+
+/* ---------- Orbit maskot hero (satu loop untuk semua item) ---------- */
+(function(){
+  const stage=document.getElementById('orbit-stage');
+  const shapes=[
+    '<path class="body" d="M30 4 L52 17 L52 43 L30 56 L8 43 L8 17 Z"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/>',
+    '<circle class="body" cx="30" cy="30" r="26"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/>',
+    '<rect class="body" x="6" y="6" width="48" height="48" rx="14"/><rect class="eyes" x="21" y="25" width="6" height="14" rx="3"/><rect class="eyes" x="33" y="25" width="6" height="14" rx="3"/>',
+    '<path class="body" d="M30 6 L54 50 L6 50 Z"/><rect class="eyes" x="24" y="33" width="5" height="12" rx="2.5"/><rect class="eyes" x="32" y="33" width="5" height="12" rx="2.5"/>'
+  ];
+  const labels=['6G C-V2X','DWPT','UAV','Phygital'];
+  const items=shapes.map((s,i)=>{
+    const el=document.createElement('div');
+    el.className='orbit-item mascot-wrap';
+    el.style.animationDelay=(i*.6)+'s';
+    el.innerHTML='<svg viewBox="0 0 60 60" class="mascot">'+s+'</svg>';
+    stage.appendChild(el);
+    const lbl=document.createElement('div');
+    lbl.className='orbit-label';lbl.textContent=labels[i];
+    stage.appendChild(lbl);
+    return {el,lbl,ang:i/shapes.length*Math.PI*2};
+  });
+  let visible=true;
+  new IntersectionObserver(e=>{visible=e[0].isIntersecting},{threshold:0}).observe(stage);
+  (function tick(){
+    requestAnimationFrame(tick);
+    if(!visible)return;
+    const W=stage.clientWidth,H=stage.clientHeight;
+    const r=Math.min(W,H)*0.39;
+    items.forEach(it=>{
+      it.ang+=0.0038;
+      const x=W/2+Math.cos(it.ang)*r;
+      const y=H/2+Math.sin(it.ang)*r*0.62;
+      it.el.style.left=(x-32)+'px';it.el.style.top=(y-32)+'px';
+      it.lbl.style.left=x+'px';it.lbl.style.top=(y-40)+'px';
+      it.lbl.style.transform='translate(-50%,-100%)';
+    });
+  })();
+})();
+
+/* ---------- Marquee ---------- */
+(function(){
+  const words=['Kemacetan','Inefisiensi Logistik','Konflik Ruang','UMKM Terfragmentasi','Emisi Karbon','Mobilitas Terhambat'];
+  const m=document.getElementById('marquee');
+  let html='';
+  for(let r=0;r<3;r++) words.forEach(w=>html+='<span>'+w+'<i>◆</i></span>');
+  m.innerHTML=html;
+  gsap.to(m,{xPercent:-33.333,duration:24,ease:'none',repeat:-1});
+})();
+
+/* ---------- Congestion bar ---------- */
+gsap.to('#cong-fill',{width:'82%',duration:2.2,ease:'power2.out',
+  scrollTrigger:{trigger:'#problem',start:'top 60%'},
+  onUpdate:function(){document.getElementById('cong-pct').textContent=Math.round(this.progress()*82)+'%';}});
+
+/* ---------- Reveal generik ---------- */
+document.querySelectorAll('.reveal').forEach(el=>{
+  gsap.to(el,{y:0,opacity:1,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%'}});
+});
+
+/* =========================================================
+   3D CITY — Three.js
+========================================================= */
+(function(){
+  const canvas=document.getElementById('city-canvas');
+  const pin=document.getElementById('city-pin');
+  const hudEl=document.getElementById('city-hud');
+  const titleEl=document.getElementById('city-title');
+  const hintEl=document.getElementById('scroll-hint');
+
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.Fog(0x0A3B36,40,140);
+  const camera=new THREE.PerspectiveCamera(46,1,.1,500);
+
+  scene.add(new THREE.AmbientLight(0xbfd8c9,.8));
+  const sun=new THREE.DirectionalLight(0xffe9b0,1.1); sun.position.set(30,48,20); scene.add(sun);
+  const limeLight=new THREE.PointLight(0xD8F000,.8,90); limeLight.position.set(0,14,0); scene.add(limeLight);
+
+  /* --- Ground & roads --- */
+  const ground=new THREE.Mesh(new THREE.CylinderGeometry(46,46,1.2,64),
+    new THREE.MeshStandardMaterial({color:0x0E5248,roughness:.95}));
+  ground.position.y=-.6; scene.add(ground);
+
+  const roadMat=new THREE.MeshStandardMaterial({color:0x123B36,roughness:.9});
+  [[0,0,92,6],[0,0,6,92]].forEach(([x,z,w,d])=>{
+    const r=new THREE.Mesh(new THREE.BoxGeometry(w,.14,d),roadMat);
+    r.position.set(x,.07,z); scene.add(r);
+  });
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(16,.35,8,80),
+    new THREE.MeshStandardMaterial({color:0xD8F000,emissive:0x6f7c00,emissiveIntensity:.5}));
+  ring.rotation.x=Math.PI/2; ring.position.y=.12; scene.add(ring);
+
+  /* --- Buildings (pseudo-random berbenih agar tata kota selalu sama) --- */
+  let seed=7;
+  const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+  const bMats=[0x1A6B5E,0x2A8371,0x155147,0x3E937F];
+  const winMat=new THREE.MeshStandardMaterial({color:0xD8F000,emissive:0xD8F000,emissiveIntensity:.35});
+  function building(x,z,w,h,d){
+    const g=new THREE.Group();
+    const body=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),
+      new THREE.MeshStandardMaterial({color:bMats[Math.floor(rnd()*bMats.length)],roughness:.8}));
+    body.position.y=h/2; g.add(body);
+    const strip=new THREE.Mesh(new THREE.BoxGeometry(w+.06,h*.45,.35),winMat);
+    strip.position.set(0,h*.55,d/2+.03); g.add(strip);
+    const roof=new THREE.Mesh(new THREE.BoxGeometry(w*.8,.3,d*.8),
+      new THREE.MeshStandardMaterial({color:0x7FBF3F,roughness:.7}));
+    roof.position.y=h+.15; g.add(roof);
+    g.position.set(x,0,z); scene.add(g);
+  }
+  for(let gx=-5;gx<=5;gx++)for(let gz=-5;gz<=5;gz++){
+    const x=gx*7.5,z=gz*7.5;
+    if(Math.abs(x)<4.5||Math.abs(z)<4.5) continue;
+    if(Math.hypot(x,z)<13) continue;
+    if(Math.hypot(x,z)>41) continue;           // tetap di dalam tanah
+    if(rnd()<.18) continue;
+    building(x+(rnd()*2-1),z+(rnd()*2-1),2.6+rnd()*2,2.5+rnd()*8,2.6+rnd()*2);
+  }
+
+  /* --- Lapis 1 : RSU towers + V2X beams --- */
+  const L1=new THREE.Group(); scene.add(L1);
+  const rsuMat=new THREE.MeshStandardMaterial({color:0x9BE015,emissive:0x5f7500,emissiveIntensity:.6});
+  const beamMat=new THREE.MeshBasicMaterial({color:0xD8F000,transparent:true,opacity:.22,depthWrite:false,side:THREE.DoubleSide});
+  [[-8,-8],[8,-8],[-8,8],[8,8],[0,-12],[0,12]].forEach(([x,z])=>{
+    const pole=new THREE.Mesh(new THREE.CylinderGeometry(.14,.18,7,8),
+      new THREE.MeshStandardMaterial({color:0x0E2B26}));
+    pole.position.set(x,3.5,z); L1.add(pole);
+    const head=new THREE.Mesh(new THREE.OctahedronGeometry(.55),rsuMat);
+    head.position.set(x,7.2,z); L1.add(head);
+    const beam=new THREE.Mesh(new THREE.CylinderGeometry(1.4,2.2,3.6,16,1,true),beamMat);
+    beam.position.set(x,9.2,z); L1.add(beam);
+  });
+  const radar=new THREE.Mesh(new THREE.TorusGeometry(10,.09,8,64),
+    new THREE.MeshBasicMaterial({color:0xD8F000,transparent:true,opacity:.5}));
+  radar.rotation.x=Math.PI/2; radar.position.y=8; L1.add(radar);
+
+  /* --- Lapis 2 : energy tiles + sun + panels --- */
+  const L2=new THREE.Group(); scene.add(L2);
+  const tileMat=new THREE.MeshStandardMaterial({color:0xD8F000,emissive:0x8a9c00,emissiveIntensity:.5});
+  const tiles=[];
+  for(let i=-4;i<=4;i++){
+    const t=new THREE.Mesh(new THREE.BoxGeometry(1.8,.1,1.8),tileMat);
+    t.position.set(i*1.05,.22,0); L2.add(t); tiles.push(t);
+    const t2=new THREE.Mesh(new THREE.BoxGeometry(1.8,.1,1.8),tileMat);
+    t2.position.set(i*1.05,.22,3.4); L2.add(t2); tiles.push(t2);
+  }
+  const sunShape=new THREE.Mesh(new THREE.SphereGeometry(1.1,16,16),
+    new THREE.MeshStandardMaterial({color:0xFFE066,emissive:0xFFB800,emissiveIntensity:1}));
+  sunShape.position.set(14,10,-10); L2.add(sunShape);
+  const panelMat=new THREE.MeshStandardMaterial({color:0x114B8A,roughness:.4,metalness:.5});
+  [[-24,-14],[-24,-22],[24,14],[24,22]].forEach(([x,z])=>{
+    const p=new THREE.Mesh(new THREE.BoxGeometry(4,.18,3),panelMat);
+    p.position.set(x,4.2,z); p.rotation.z=.35; L2.add(p);
+  });
+
+  /* --- Lapis 3 : Anjungan Hub + UAV + holo ring --- */
+  const L3=new THREE.Group(); scene.add(L3);
+  const hub=new THREE.Group();
+  const hubBase=new THREE.Mesh(new THREE.CylinderGeometry(6.5,7,1,24),new THREE.MeshStandardMaterial({color:0x2A8371}));
+  hubBase.position.y=.5; hub.add(hubBase);
+  const hubBody=new THREE.Mesh(new THREE.CylinderGeometry(4.6,5.6,4.5,24),new THREE.MeshStandardMaterial({color:0xE8E3CE,roughness:.6}));
+  hubBody.position.y=3.2; hub.add(hubBody);
+  const hubBand=new THREE.Mesh(new THREE.TorusGeometry(5.15,.22,10,48),new THREE.MeshBasicMaterial({color:0xD8F000}));
+  hubBand.rotation.x=Math.PI/2; hubBand.position.y=4.4; hub.add(hubBand);
+  const hubRoof=new THREE.Mesh(new THREE.ConeGeometry(5.1,2.4,24),new THREE.MeshStandardMaterial({color:0x0E6B5C}));
+  hubRoof.position.y=6.6; hub.add(hubRoof);
+  const holo=new THREE.Mesh(new THREE.TorusGeometry(3,.12,10,48),new THREE.MeshBasicMaterial({color:0x9BE015,transparent:true,opacity:.7}));
+  holo.position.y=8.4; hub.add(holo);
+  const holo2=new THREE.Mesh(new THREE.TorusGeometry(3,.12,10,48),new THREE.MeshBasicMaterial({color:0x9BE015,transparent:true,opacity:.7}));
+  holo2.scale.setScalar(.6); holo2.position.y=9.4; hub.add(holo2);
+  L3.add(hub);
+
+  const drones=[];
+  const droneMat=new THREE.MeshStandardMaterial({color:0xDAD5C0,roughness:.5});
+  for(let i=0;i<7;i++){
+    const d=new THREE.Group();
+    d.add(new THREE.Mesh(new THREE.BoxGeometry(1,.3,.7),droneMat));
+    [[-.6,-.45],[.6,-.45],[-.6,.45],[.6,.45]].forEach(([rx,rz])=>{
+      const rotor=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.05,12),
+        new THREE.MeshBasicMaterial({color:0xD8F000,transparent:true,opacity:.85}));
+      rotor.position.set(rx,.2,rz); d.add(rotor);
+    });
+    const light=new THREE.Mesh(new THREE.SphereGeometry(.1,8,8),new THREE.MeshBasicMaterial({color:0xFF5A5A}));
+    light.position.y=-.2; d.add(light);
+    d.userData={r:12+rnd()*14,sp:.25+rnd()*.3,ph:rnd()*Math.PI*2,h:9+rnd()*5};
+    L3.add(d); drones.push(d);
+  }
+
+  /* --- Cars --- */
+  const cars=[];
+  const carCols=[0xF2EFE0,0x9BE015,0x4ECDC4];
+  for(let i=0;i<10;i++){
+    const c=new THREE.Mesh(new THREE.BoxGeometry(1.4,.55,.8),new THREE.MeshStandardMaterial({color:carCols[i%3],roughness:.5}));
+    c.userData={axis:i%2===0?'x':'z',lane:(i%4<2?1:-1)*(i%2===0?2.2:-2.2),off:rnd()*80-40,sp:(.06+rnd()*.05)*(i%2?1:-1)};
+    scene.add(c); cars.push(c);
+  }
+
+  /* --- Opasitas per lapis: simpan nilai dasar tiap material, lalu kalikan --- */
+  const layerGroups={1:L1,2:L2,3:L3};
+  [L1,L2,L3].forEach(g=>g.traverse(o=>{
+    if(!o.material)return;
+    o.material=o.material.clone();
+    const m=o.material;
+    m.transparent=true;
+    m.userData.baseOp=m.opacity;
+    m.userData.baseEm=(m.emissiveIntensity!==undefined)?m.emissiveIntensity:undefined;
+  }));
+  const cur={1:.08,2:.08,3:.3}, tgt={1:.08,2:.08,3:.3}, applied={1:-1,2:-1,3:-1};
+  function applyLayer(i,v){
+    layerGroups[i].traverse(o=>{
+      const m=o.material; if(!m)return;
+      m.opacity=m.userData.baseOp*v;
+      if(m.userData.baseEm!==undefined) m.emissiveIntensity=m.userData.baseEm*(.3+.7*v);
+      m.visible=m.opacity>.01;
+    });
+  }
+
+  /* --- Callout labels --- */
+  const calloutData=[
+    {pos:new THREE.Vector3(-8,9,-8),   html:'<b>RSU · ISAC Radar</b> — lokalisasi real-time',layer:1},
+    {pos:new THREE.Vector3(8,9,8),     html:'<b>IRS</b> — pantulan sinyal 6G anti blind-spot',layer:1},
+    {pos:new THREE.Vector3(-4,1.2,0),  html:'<b>Aspal Piezoelektrik</b> — energi dari tekanan ban',layer:2},
+    {pos:new THREE.Vector3(4,1.2,3.4), html:'<b>DWPT</b> — pengisian daya nirkabel dinamis',layer:2},
+    {pos:new THREE.Vector3(0,10,0),    html:'<b>Anjungan Niskala Nusantara</b> — Micro-Economy Hub',layer:3},
+    {pos:new THREE.Vector3(12,11,6),   html:'<b>UAV</b> — logistik last-mile otomatis',layer:3},
+    {pos:new THREE.Vector3(-12,11,6),  html:'<b>Urban Digital Twin</b> — kontrol kota virtual',layer:3},
+  ];
+  const coWrap=document.getElementById('callouts');
+  calloutData.forEach(c=>{
+    const el=document.createElement('div');
+    el.className='callout'; el.innerHTML=c.html+'<span class="dot"></span>';
+    coWrap.appendChild(el); c.el=el; c.w=160; c.shown=false;
+  });
+
+  /* --- Resize: ukuran canvas selalu mengikuti pin (tengah & penuh) --- */
+  function resize(){
+    const w=pin.clientWidth,h=pin.clientHeight;
+    if(!w||!h)return;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h;
+    camera.fov=camera.aspect<.75?80:(camera.aspect<1.1?64:46);   // layar sempit -> FOV lebih lebar
+    camera.updateProjectionMatrix();
+    calloutData.forEach(c=>{c.w=c.el.offsetWidth||160;});
+  }
+  resize();
+  if('ResizeObserver' in window) new ResizeObserver(resize).observe(pin);
+  window.addEventListener('resize',resize);
+
+  /* --- Kartu aktif --- */
+  const cards=[document.getElementById('card-1'),document.getElementById('card-2'),document.getElementById('card-3')];
+  gsap.set(cards,{autoAlpha:0,x:-30});
+  let activeLayer=0;
+  function setActive(i){
+    if(i===activeLayer)return;
+    activeLayer=i;
+    cards.forEach((c,k)=>gsap.to(c,{autoAlpha:k===i-1?1:0,x:k===i-1?0:-30,duration:.5,overwrite:'auto'}));
+  }
+  setActive(1);
+
+  /* --- Scroll timeline --- */
+  const camState={y:34,r:58,ty:4,a:.001};
+  const tl=gsap.timeline({
+    scrollTrigger:{
+      trigger:'#city-section',start:'top top',end:'+=3800',pin:'#city-pin',scrub:1,anticipatePin:1,
+      onUpdate:self=>{
+        const p=self.progress;
+        tgt[1]=p>.08?.95:.08;
+        tgt[2]=p>.36?.95:.08;
+        tgt[3]=p>.64?1:.3;
+        setActive(p<.30?1:(p<.58?2:3));
+        hintEl.style.opacity=p>.04?0:1;
+      }
+    }
+  });
+  tl.to(camState,{y:20,r:44,ty:5,a:.9,ease:'none'},0)
+    .to(camState,{y:12,r:34,ty:3,a:2.1,ease:'none'},.33)
+    .to(camState,{y:17,r:26,ty:6,a:3.6,ease:'none'},.66)
+    .to(camState,{y:9,r:18,ty:7,a:4.6,ease:'none'},.86);
+
+  /* --- Callouts: tampil hanya untuk lapis aktif, tidak menabrak judul/kartu/tepi layar --- */
+  const v3=new THREE.Vector3();
+  const overlap=(a,b)=>!(a.r<b.l||a.l>b.r||a.b<b.t||a.t>b.b);
+  function updateCallouts(){
+    const W=pin.clientWidth,H=pin.clientHeight;
+    const pr=pin.getBoundingClientRect();
+    const rel=r=>({l:r.left-pr.left,r:r.right-pr.left,t:r.top-pr.top,b:r.bottom-pr.top});
+    const hudR=rel(hudEl.getBoundingClientRect()), titleR=rel(titleEl.getBoundingClientRect());
+    calloutData.forEach(c=>{
+      v3.copy(c.pos).project(camera);
+      const x=(v3.x*.5+.5)*W, y=(-v3.y*.5+.5)*H;
+      const w=c.w, hgt=c.el.offsetHeight||34;
+      const box={l:x-w/2-6,r:x+w/2+6,t:y-hgt*1.3-6,b:y+30};
+      let show=v3.z<1&&c.layer===activeLayer;
+      if(box.l<6||box.r>W-6||box.b>H-6) show=false;
+      if(overlap(box,titleR)||overlap(box,hudR)) show=false;
+      c.el.style.left=x+'px'; c.el.style.top=y+'px';
+      if(show!==c.shown){c.shown=show;c.el.style.opacity=show?'1':'0';}
+    });
+  }
+
+  /* --- Render loop (berhenti saat section tidak terlihat) --- */
+  let inView=true;
+  new IntersectionObserver(e=>{inView=e[0].isIntersecting},{threshold:0}).observe(pin);
+  const clock=new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!inView)return;
+    const t=clock.getElapsedTime();
+    [1,2,3].forEach(i=>{
+      cur[i]+=(tgt[i]-cur[i])*.1;
+      if(Math.abs(cur[i]-applied[i])>.004){applied[i]=cur[i];applyLayer(i,cur[i]);}
+    });
+    camera.position.set(Math.cos(camState.a)*camState.r,camState.y,Math.sin(camState.a)*camState.r);
+    camera.lookAt(0,camState.ty,0);
+    radar.rotation.z=t*.8;
+    holo.rotation.y=t; holo2.rotation.y=-t*1.4; holo2.rotation.x=Math.sin(t*.7)*.3;
+    ring.material.emissiveIntensity=.4+Math.sin(t*2)*.25;
+    drones.forEach(d=>{
+      const u=d.userData;
+      d.position.set(Math.cos(t*u.sp+u.ph)*u.r,u.h+Math.sin(t*1.3+u.ph)*.8,Math.sin(t*u.sp+u.ph)*u.r);
+      d.rotation.y=-(t*u.sp+u.ph)-Math.PI/2;
+    });
+    cars.forEach(c=>{
+      const u=c.userData;u.off+=u.sp;
+      const p=((u.off+50)%100+100)%100-50;
+      if(u.axis==='x'){c.position.set(p*.9,.45,u.lane);c.rotation.y=0;}
+      else{c.position.set(u.lane,.45,p*.9);c.rotation.y=Math.PI/2;}
+    });
+    updateCallouts();
+    renderer.render(scene,camera);
+  }
+  animate();
+  window.addEventListener('load',()=>{resize();ScrollTrigger.refresh();});
+})();
+
+/* ---------- Stars di CTA ---------- */
+(function(){
+  const s=document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const st=document.createElement('div');
+    const sz=Math.random()*2.4+.8;
+    st.style.cssText='position:absolute;width:'+sz+'px;height:'+sz+'px;border-radius:50%;'+
+      'background:'+(Math.random()>.75?'#D8F000':'rgba(247,244,232,.7)')+';'+
+      'left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;opacity:'+(.2+Math.random()*.6)+';';
+    s.appendChild(st);
+    gsap.to(st,{y:'-=30',opacity:.05,duration:3+Math.random()*5,repeat:-1,yoyo:true,ease:'sine.inOut',delay:Math.random()*4});
+  }
+})();
+
+/* ---------- CTA ---------- */
+gsap.from('.cta-inner > *',{y:60,opacity:0,duration:1,stagger:.12,ease:'power3.out',
+  scrollTrigger:{trigger:'#cta',start:'top 65%'}});
+document.getElementById('cta-btn').addEventListener('click',()=>{
+  const b=document.getElementById('cta-btn');
+  b.innerHTML='✦ Terima kasih — sampai jumpa di 2045!';
+  gsap.fromTo(b,{scale:.92},{scale:1,duration:.6,ease:'elastic.out(1,.4)'});
+  confettiBurst();
+});
+function confettiBurst(){
+  const cta=document.getElementById('cta');
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div');
+    const sz=6+Math.random()*8;
+    const cols=['#D8F000','#9BE015','#4ECDC4','#F7F4E8'];
+    p.style.cssText='position:absolute;width:'+sz+'px;height:'+sz+'px;z-index:9;'+
+      'background:'+cols[i%4]+';left:50%;top:55%;border-radius:'+(i%2?'50%':'2px')+';';
+    cta.appendChild(p);
+    gsap.to(p,{x:(Math.random()-.5)*Math.min(560,innerWidth),y:(Math.random()-.75)*460,rotation:Math.random()*720,
+      opacity:0,duration:1.6+Math.random(),ease:'power2.out',onComplete:()=>p.remove()});
+  }
+}
+
+/* ---------- Smooth anchor scroll ---------- */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(!t)return;
+    e.preventDefault();
+    t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
